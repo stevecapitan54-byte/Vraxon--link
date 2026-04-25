@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex" />
+  <title>VRAXON</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --black: #050505;
+      --white: #f0ece4;
+      --gold: #b89a5a;
+      --gold-dim: #7a6335;
+    }
+    html, body { height: 100%; background: var(--black); color: var(--white); font-family: 'Cormorant Garamond', serif; overflow: hidden; }
+    body::after { content: ''; position: fixed; inset: 0; background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.85) 100%); pointer-events: none; z-index: 9; }
+    .container { position: relative; z-index: 20; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 2rem; text-align: center; }
+    .rule { width: 1px; height: 60px; background: linear-gradient(to bottom, transparent, var(--gold)); margin: 0 auto 2rem; animation: fadeDown 1s ease forwards; opacity: 0; }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: clamp(3rem, 12vw, 5.5rem); letter-spacing: 0.18em; color: var(--white); line-height: 1; animation: fadeUp 0.9s ease 0.2s forwards; opacity: 0; }
+    .logo span { color: var(--gold); }
+    .divider { width: 40px; height: 1px; background: var(--gold-dim); margin: 1.4rem auto; animation: expand 0.8s ease 0.6s forwards; transform: scaleX(0); }
+    .redirect-msg { font-style: italic; font-size: clamp(0.9rem, 3.5vw, 1.1rem); color: rgba(240,236,228,0.55); letter-spacing: 0.08em; line-height: 1.7; animation: fadeUp 0.9s ease 0.8s forwards; opacity: 0; }
+    .ios-card { display: none; flex-direction: column; align-items: center; gap: 0; animation: fadeUp 0.9s ease 0.8s forwards; opacity: 0; }
+    .ios-card.active { display: flex; }
+    .instruction { font-size: clamp(0.85rem, 3.2vw, 1rem); color: rgba(240,236,228,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 1.6rem; }
+    .step { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.2rem; max-width: 280px; text-align: left; }
+    .step-num { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; color: var(--gold); letter-spacing: 0.1em; min-width: 24px; padding-top: 2px; }
+    .step-text { font-size: clamp(1rem, 3.8vw, 1.15rem); color: var(--white); line-height: 1.5; }
+    .step-text strong { color: var(--gold); font-style: italic; }
+    .dots-icon { display: inline-block; font-size: 1.3rem; color: var(--gold); font-style: normal; }
+    .rule-bottom { width: 1px; height: 40px; background: linear-gradient(to top, transparent, var(--gold-dim)); margin: 2rem auto 0; animation: fadeUp 1s ease 1.2s forwards; opacity: 0; }
+    .tagline { font-style: italic; font-size: clamp(0.7rem, 2.5vw, 0.85rem); color: rgba(240,236,228,0.2); letter-spacing: 0.2em; text-transform: uppercase; margin-top: 1rem; animation: fadeUp 1s ease 1.4s forwards; opacity: 0; }
+    .loader { width: 120px; height: 1px; background: var(--gold-dim); margin: 1.5rem auto 0; position: relative; overflow: hidden; animation: fadeUp 0.9s ease 1s forwards; opacity: 0; }
+    .loader::after { content: ''; position: absolute; left: -100%; top: 0; height: 100%; width: 100%; background: var(--gold); animation: load 2s ease 1.5s forwards; }
+    @keyframes load { to { left: 0; } }
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes expand { to { transform: scaleX(1); } }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="rule"></div>
+    <div class="logo">VRA<span>X</span>ON</div>
+    <div class="divider"></div>
+    <div class="redirect-msg" id="android-msg">Opening your store...<br/>Redirecting to Chrome</div>
+    <div class="loader" id="android-loader"></div>
+    <div class="ios-card" id="ios-card">
+      <div class="instruction">One step to enter</div>
+      <div class="step">
+        <div class="step-num">01</div>
+        <div class="step-text">Tap <strong><span class="dots-icon">···</span></strong> in the top right corner</div>
+      </div>
+      <div class="step">
+        <div class="step-num">02</div>
+        <div class="step-text">Select <strong>"Open in Browser"</strong></div>
+      </div>
+    </div>
+    <div class="rule-bottom"></div>
+    <div class="tagline">Temple Warrior</div>
+  </div>
+  <script>
+    const GUMROAD = "https://structuredwarrior.gumroad.com/l/yeknh";
+    const ua = navigator.userAgent;
+    const androidMsg = document.getElementById('android-msg');
+    const androidLoader = document.getElementById('android-loader');
+    const iosCard = document.getElementById('ios-card');
+    if (/Instagram/.test(ua)) {
+      if (/Android/.test(ua)) {
+        androidMsg.style.display = 'block';
+        androidLoader.style.display = 'block';
+        iosCard.style.display = 'none';
+        setTimeout(() => {
+          window.location = "intent://" + GUMROAD.replace("https://", "") + "#Intent;scheme=https;package=com.android.chrome;end";
+        }, 2500);
+      } else {
+        androidMsg.style.display = 'none';
+        androidLoader.style.display = 'none';
+        iosCard.classList.add('active');
+        iosCard.style.opacity = '0';
+      }
+    } else {
+      window.location = GUMROAD;
+    }
+  </script>
+</body>
+</html>
